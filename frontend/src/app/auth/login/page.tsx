@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import Cookies from 'js-cookie'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -15,7 +15,7 @@ const loginSchema = z.object({
 
 type LoginFormData = z.infer<typeof loginSchema>
 
-export default function LoginPage() {
+function LoginForm() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const [isLoading, setIsLoading] = useState(false)
@@ -36,9 +36,10 @@ export default function LoginPage() {
         resolver: zodResolver(loginSchema),
     })
 
-    const onSubmit = async (data: LoginFormData) => {
+    const onSubmit = async (formData: LoginFormData) => {
         setIsLoading(true)
         try {
+            console.log('Login data:', formData)
             await new Promise(resolve => setTimeout(resolve, 1000))
             Cookies.set('userType', userType, { expires: 7 })
             router.push(`/${userType}/dashboard`)
@@ -57,7 +58,7 @@ export default function LoginPage() {
                         Welcome back
                     </h2>
                     <p className="mt-2 text-sm text-gray-600">
-                        Don't have an account?{' '}
+                        Don&apos;t have an account?{' '}
                         <Link href="/auth/signup" className="font-medium text-blue-600 hover:text-blue-500">
                             Sign up
                         </Link>
@@ -196,5 +197,13 @@ export default function LoginPage() {
                 </form>
             </div>
         </div>
+    )
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <LoginForm />
+        </Suspense>
     )
 } 

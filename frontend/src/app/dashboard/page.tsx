@@ -96,7 +96,7 @@ export default function DashboardPage() {
                         Welcome back, {userType === 'company' ? 'Company' : 'User'}!
                     </h1>
                     <p className="mt-1 text-sm text-gray-500">
-                        Here's what's happening with your {userType === 'company' ? 'recruitment' : 'job search'} today.
+                        Here&apos;s what&apos;s happening with your {userType === 'company' ? 'recruitment' : 'job search'} today.
                     </p>
                 </div>
 

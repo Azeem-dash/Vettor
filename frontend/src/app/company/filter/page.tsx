@@ -13,18 +13,19 @@ const filterSchema = z.object({
     experience: z.object({
         min: z.number().min(0),
         max: z.number().min(0),
+        currency: z.string()
     }),
     location: z.object({
-        type: z.enum(['remote', 'onsite', 'hybrid']),
+        type: z.enum(['onsite', 'remote', 'hybrid']),
         city: z.string().optional(),
-        country: z.string().optional(),
+        country: z.string().optional()
     }),
     education: z.array(z.string()).optional(),
     salary: z.object({
-        min: z.number().optional(),
-        max: z.number().optional(),
-        currency: z.string().default('USD'),
-    }).optional(),
+        min: z.number().min(0),
+        max: z.number().min(0),
+        currency: z.string()
+    })
 })
 
 type FilterFormData = z.infer<typeof filterSchema>
@@ -42,10 +43,10 @@ export default function JobFilterPage() {
         resolver: zodResolver(filterSchema),
         defaultValues: {
             skills: [],
-            experience: { min: 0, max: 10 },
+            experience: { min: 0, max: 10, currency: 'USD' },
             location: { type: 'onsite' },
             education: [],
-            salary: { currency: 'USD' },
+            salary: { min: 0, max: 0, currency: 'USD' },
         },
     })
 

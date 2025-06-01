@@ -6,7 +6,6 @@ import {
     FunnelIcon,
     MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 interface Candidate {
@@ -45,17 +44,36 @@ const mockCandidates: Candidate[] = [
     // Add more mock candidates as needed
 ]
 
-export default function CandidatesPage() {
-    const router = useRouter()
+export default function CompanyCandidates() {
     const [searchQuery, setSearchQuery] = useState('')
+    const [filters, setFilters] = useState({
+        experience: '',
+        location: '',
+        skills: '',
+    })
     const [sortBy, setSortBy] = useState<'match' | 'experience'>('match')
     const [selectedCandidates, setSelectedCandidates] = useState<string[]>([])
 
-    const filteredCandidates = mockCandidates.filter((candidate) =>
-        candidate.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        candidate.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        candidate.skills.some(skill => skill.toLowerCase().includes(searchQuery.toLowerCase()))
-    )
+    const handleFilterChange = (key: keyof typeof filters, value: string) => {
+        setFilters(prev => ({
+            ...prev,
+            [key]: value
+        }))
+    }
+
+    const filteredCandidates = mockCandidates.filter((candidate) => {
+        const matchesSearch = candidate.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            candidate.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            candidate.skills.some(skill => skill.toLowerCase().includes(searchQuery.toLowerCase()));
+
+        const matchesExperience = !filters.experience || candidate.experience >= parseInt(filters.experience);
+        const matchesLocation = !filters.location || candidate.location.toLowerCase().includes(filters.location.toLowerCase());
+        const matchesSkills = !filters.skills || candidate.skills.some(skill =>
+            skill.toLowerCase().includes(filters.skills.toLowerCase())
+        );
+
+        return matchesSearch && matchesExperience && matchesLocation && matchesSkills;
+    })
 
     const sortedCandidates = [...filteredCandidates].sort((a, b) => {
         if (sortBy === 'match') {
@@ -141,6 +159,32 @@ export default function CandidatesPage() {
                             <FunnelIcon className="h-5 w-5 mr-2" />
                             More Filters
                         </button>
+                    </div>
+                    <div className="flex items-center space-x-4">
+                        <select
+                            value={filters.experience}
+                            onChange={(e) => handleFilterChange('experience', e.target.value)}
+                            className="rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-blue-600 sm:text-sm sm:leading-6"
+                        >
+                            <option value="">Experience</option>
+                            <option value="1">1+ years</option>
+                            <option value="3">3+ years</option>
+                            <option value="5">5+ years</option>
+                        </select>
+                        <input
+                            type="text"
+                            value={filters.location}
+                            onChange={(e) => handleFilterChange('location', e.target.value)}
+                            placeholder="Location"
+                            className="rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-blue-600 sm:text-sm sm:leading-6"
+                        />
+                        <input
+                            type="text"
+                            value={filters.skills}
+                            onChange={(e) => handleFilterChange('skills', e.target.value)}
+                            placeholder="Skills"
+                            className="rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-blue-600 sm:text-sm sm:leading-6"
+                        />
                     </div>
                 </div>
 
@@ -233,10 +277,10 @@ export default function CandidatesPage() {
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm">
                                                     <span
                                                         className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${candidate.status === 'new'
-                                                                ? 'bg-green-100 text-green-700'
-                                                                : candidate.status === 'contacted'
-                                                                    ? 'bg-yellow-100 text-yellow-700'
-                                                                    : 'bg-blue-100 text-blue-700'
+                                                            ? 'bg-green-100 text-green-700'
+                                                            : candidate.status === 'contacted'
+                                                                ? 'bg-yellow-100 text-yellow-700'
+                                                                : 'bg-blue-100 text-blue-700'
                                                             }`}
                                                     >
                                                         {candidate.status.charAt(0).toUpperCase() + candidate.status.slice(1)}

@@ -155,7 +155,7 @@ export default function LandingPage() {
               {...(shouldAnimate ? fadeInUp : {})}
               className="mt-6 text-lg leading-8 text-gray-600"
             >
-              Say goodbye to manual screening. <b>Vettor</b> helps companies find the right candidates faster, and guides job seekers to land their dream roles — smarter, fairer, and faster.
+              We&apos;re revolutionizing the recruitment process with AI-powered matching and automation.
             </motion.p>
             <motion.div
               {...(shouldAnimate ? fadeInUp : {})}
@@ -217,7 +217,7 @@ export default function LandingPage() {
               {...(shouldAnimate ? fadeInUp : {})}
               className="mt-6 text-lg leading-8 text-gray-600"
             >
-              Companies receive hundreds of irrelevant CVs, interviews are time-consuming and biased, talented candidates get ignored, and students don't know where to start.
+              Companies receive hundreds of irrelevant CVs, interviews are time-consuming and biased, talented candidates get ignored, and students don&apos;t know where to start.
             </motion.p>
           </div>
         </div>
@@ -525,7 +525,7 @@ export default function LandingPage() {
               Join Us Now
             </motion.div>
             <h2 className="mx-auto max-w-2xl text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Whether you're hiring or job-seeking — get ahead with AI.
+              Whether you&apos;re hiring or job-seeking — get ahead with AI.
             </h2>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link

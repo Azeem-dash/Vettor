@@ -9,7 +9,6 @@ import {
     ClockIcon,
     Cog6ToothIcon,
     DocumentArrowUpIcon,
-    EnvelopeIcon,
     UserGroupIcon,
     XCircleIcon
 } from '@heroicons/react/24/outline'
@@ -51,30 +50,10 @@ const dummyCandidates = [
 ]
 
 const steps = [
-    {
-        id: 'upload',
-        name: 'Upload CVs',
-        description: 'Upload multiple resumes in PDF or DOC format',
-        icon: DocumentArrowUpIcon,
-    },
-    {
-        id: 'filter',
-        name: 'Set Criteria',
-        description: 'Define job requirements and preferences',
-        icon: ChartBarIcon,
-    },
-    {
-        id: 'review',
-        name: 'Review Matches',
-        description: 'View AI-ranked candidates and their details',
-        icon: UserGroupIcon,
-    },
-    {
-        id: 'interview',
-        name: 'Schedule Interviews',
-        description: 'Send automated interview invitations',
-        icon: EnvelopeIcon,
-    },
+    { id: 'upload', name: 'Upload Resumes', status: 'current' },
+    { id: 'filter', name: 'Filter Candidates', status: 'upcoming' },
+    { id: 'review', name: 'Review Matches', status: 'upcoming' },
+    { id: 'contact', name: 'Contact Candidates', status: 'upcoming' },
 ]
 
 const navigationItems = [
@@ -117,7 +96,7 @@ const navigationItems = [
 ]
 
 export default function CompanyDashboard() {
-    const [currentStep, setCurrentStep] = useState('upload')
+    const [currentStep, setCurrentStep] = useState(0)
     const [currentSection, setCurrentSection] = useState('overview')
     const [uploadedFiles, setUploadedFiles] = useState<string[]>([])
     const [jobCriteria, setJobCriteria] = useState({
@@ -420,14 +399,40 @@ export default function CompanyDashboard() {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            {/* Header */}
-            <header className="bg-white shadow">
-                <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                    <h1 className="text-3xl font-bold tracking-tight text-gray-900">Company Dashboard</h1>
+            <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+                <div className="px-4 py-6 sm:px-0">
+                    <h1 className="text-2xl font-semibold text-gray-900">Company Dashboard</h1>
+                    <p className="mt-1 text-sm text-gray-500">
+                        Manage your recruitment process
+                    </p>
                 </div>
-            </header>
+            </div>
 
             <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                {/* Progress Steps */}
+                <nav aria-label="Progress">
+                    <ol role="list" className="space-y-4 md:flex md:space-x-8 md:space-y-0">
+                        {steps.map((step, index) => (
+                            <li key={step.id} className="md:flex-1">
+                                <button
+                                    onClick={() => setCurrentStep(index)}
+                                    className={`group flex w-full flex-col border-l-4 py-2 pl-4 transition-colors md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4 ${index === currentStep
+                                            ? 'border-blue-600'
+                                            : index < currentStep
+                                                ? 'border-green-600'
+                                                : 'border-gray-200'
+                                        }`}
+                                >
+                                    <span className="text-sm font-medium text-blue-600">{step.name}</span>
+                                    <span className="text-sm font-medium">
+                                        {index === currentStep ? 'Current' : index < currentStep ? 'Completed' : 'Upcoming'}
+                                    </span>
+                                </button>
+                            </li>
+                        ))}
+                    </ol>
+                </nav>
+
                 {/* Navigation */}
                 <div className="mb-8">
                     <nav className="flex space-x-4 overflow-x-auto pb-4">

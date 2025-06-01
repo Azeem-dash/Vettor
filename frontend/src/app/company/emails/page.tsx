@@ -1,6 +1,6 @@
 'use client'
 
-import { PaperAirplaneIcon } from '@heroicons/react/24/outline'
+import { PaperAirplaneIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -87,7 +87,6 @@ export default function EmailPage() {
         register,
         handleSubmit,
         setValue,
-        watch,
         formState: { errors, isSubmitting },
     } = useForm<EmailFormData>({
         resolver: zodResolver(emailSchema),

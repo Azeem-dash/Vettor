@@ -74,13 +74,44 @@ export default function CandidateDashboard() {
 
     return (
         <div className="min-h-screen bg-gray-50">
+            <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+                <div className="px-4 py-6 sm:px-0">
+                    <h1 className="text-2xl font-semibold text-gray-900">Welcome to your dashboard</h1>
+                    <p className="mt-1 text-sm text-gray-500">
+                        Here&apos;s an overview of your profile and applications
+                    </p>
+                </div>
+            </div>
             <main className="py-10">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div className="border-b border-gray-200 pb-5">
+                        <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+                            <button
+                                onClick={() => setActiveTab('overview')}
+                                className={`${activeTab === 'overview'
+                                    ? 'border-blue-500 text-blue-600'
+                                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                                    } whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium`}
+                            >
+                                Overview
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('applications')}
+                                className={`${activeTab === 'applications'
+                                    ? 'border-blue-500 text-blue-600'
+                                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                                    } whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium`}
+                            >
+                                Applications
+                            </button>
+                        </nav>
+                    </div>
+
                     {/* Welcome Section */}
                     <div className="mb-8">
                         <h1 className="text-3xl font-bold text-gray-900">Welcome back, John!</h1>
                         <p className="mt-2 text-sm text-gray-600">
-                            Here's what's happening with your job search today.
+                            Here&apos;s what&apos;s happening with your job search today.
                         </p>
                     </div>
 

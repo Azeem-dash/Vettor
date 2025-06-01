@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import Cookies from 'js-cookie'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -20,7 +20,7 @@ const signupSchema = z.object({
 
 type SignupFormData = z.infer<typeof signupSchema>
 
-export default function SignupPage() {
+function SignupForm() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const [isLoading, setIsLoading] = useState(false)
@@ -41,9 +41,10 @@ export default function SignupPage() {
         resolver: zodResolver(signupSchema),
     })
 
-    const onSubmit = async (data: SignupFormData) => {
+    const onSubmit = async (formData: SignupFormData) => {
         setIsLoading(true)
         try {
+            console.log('Signup data:', formData)
             await new Promise(resolve => setTimeout(resolve, 1000))
             Cookies.set('userType', userType, { expires: 7 })
             router.push(`/${userType}/dashboard`)
@@ -214,5 +215,13 @@ export default function SignupPage() {
                 </form>
             </div>
         </div>
+    )
+}
+
+export default function SignupPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <SignupForm />
+        </Suspense>
     )
 } 

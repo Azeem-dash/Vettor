@@ -23,7 +23,7 @@ export default function EarlyAccessPage() {
                 <h1 className="text-2xl font-bold mb-4 text-blue-700">Join Early Access List</h1>
                 {submitted ? (
                     <div className="text-green-600 font-semibold text-center py-8">
-                        Thank you for joining! We'll keep you updated.
+                        Thank you for joining! We&apos;ll keep you updated.
                     </div>
                 ) : (
                     <form onSubmit={handleSubmit} className="space-y-4">
@@ -57,6 +57,9 @@ export default function EarlyAccessPage() {
                         </button>
                     </form>
                 )}
+                <p className="mt-3 text-lg text-gray-500">
+                    We&apos;re currently in private beta. Join our waitlist to get early access.
+                </p>
             </div>
         </div>
     )
