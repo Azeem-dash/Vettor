@@ -5,93 +5,81 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { FormEvent, useEffect, useState } from 'react'
 
-const heroHighlights = [
-  {
-    icon: '⚡',
-    title: '47s to shortlist',
-    subtitle: 'Process 200 CVs with AI triage in under a minute.'
-  },
-  {
-    icon: '🎯',
-    title: '5x faster hires',
-    subtitle: 'Cut time-to-interview by focusing only on top-fit profiles.'
-  },
-  {
-    icon: '🛡️',
-    title: 'Bias-aware scoring',
-    subtitle: 'Explainable fit score for every candidate you shortlist.'
-  }
-]
-
 const painPoints = [
   {
     icon: '🕐',
-    title: 'The Time Sink',
-    description: 'Recruiting teams spend 10+ hours every week vetting 200+ CVs where 80% are irrelevant.',
-    metric: '15 hrs/week wasted',
+    title: 'Hours Wasted on Irrelevant CVs',
+    description: 'You spend hours screening hundreds of CVs, 80% are irrelevant.',
     accent: 'from-rose-50 to-orange-50 border-rose-200 text-rose-600'
   },
   {
     icon: '😫',
-    title: 'Missed Talent',
-    description: 'Human fatigue and bias mean your best candidates slip through the cracks.',
-    metric: '42% of good candidates missed',
+    title: 'Biased and Inconsistent Screening',
+    description: 'Manual screening is biased and inconsistent - you miss great talent.',
     accent: 'from-amber-50 to-yellow-50 border-amber-200 text-amber-600'
   },
   {
     icon: '💸',
-    title: 'Budget Burn',
-    description: 'Every manual screening hour costs ~$75 in recruiter time with zero compounding value.',
-    metric: '$3,750/month wasted',
+    title: 'Wasted Team Time',
+    description: 'Your expensive team time is wasted on administrative work.',
     accent: 'from-emerald-50 to-green-50 border-emerald-200 text-emerald-600'
   }
 ]
 
-const processSteps = [
+const redditQuotes = [
   {
-    number: '01',
-    title: 'Upload & Go',
-    description: 'Drag & drop hundreds of CVs. We handle PDF, Word, LinkedIn exports — no manual data entry.',
-    badge: 'Multi-format AI parsing'
+    quote: '"I spend 15+ hours a week just filtering through resumes. Most are completely irrelevant. There has to be a better way."',
+    source: 'r/recruiting'
   },
   {
-    number: '02',
-    title: 'Set the Signal',
-    description: 'Mark must-have skills, years of experience, culture-fit markers, and knock-out criteria.',
-    badge: 'Smart criteria builder'
-  },
-  {
-    number: '03',
-    title: 'Review the Shortlist',
-    description: 'Get a ranked shortlist with explainable fit scores, ready to invite to interview.',
-    badge: 'Explainable AI scoring'
+    quote: '"The worst part is knowing I\'m probably missing great candidates because I\'m so burned out by the time I get to resume #50."',
+    source: 'r/humanresources'
   }
 ]
 
-const socialProofLogos = ['TechHub', 'InnovateCorp', 'TalentWorks', 'BridgeLabs']
-
-const securityPoints = ['🔒 GDPR Ready', '📊 End-to-end Encryption', '🤖 Bias Tracking & Alerts']
+const solutionFeatures = [
+  {
+    icon: '📄',
+    title: 'Upload hundreds of CVs at once',
+    description: 'PDF, DOC formats supported'
+  },
+  {
+    icon: '🎯',
+    title: 'Set simple filters',
+    description: 'Skills, experience, certifications'
+  },
+  {
+    icon: '⚡',
+    title: 'Get a ranked shortlist in under 60 seconds',
+    description: 'Fast results you can trust'
+  },
+  {
+    icon: '🔍',
+    title: 'See WHY candidates were selected',
+    description: 'Transparent AI explanations'
+  }
+]
 
 const founderBenefits = [
   {
     icon: '🎁',
-    title: '6 Months Free',
-    description: 'Extended beta access plus a lifetime founder discount.'
+    title: '6 months FREE access',
+    description: 'When we launch, you get 6 months free.'
   },
   {
     icon: '💬',
-    title: 'Shape the Roadmap',
-    description: 'Weekly product sessions so we build what matters to your team.'
+    title: 'Help shape the product',
+    description: 'Your feedback directly influences what we build.'
   },
   {
     icon: '⭐',
-    title: 'VIP Treatment',
-    description: 'Priority support, feature fast-lane, and direct founder access.'
+    title: 'Priority support forever',
+    description: 'You\'ll always be a priority.'
   },
   {
-    icon: '🤝',
-    title: 'Founder Circle',
-    description: 'Join a private network of forward-thinking recruiting leaders.'
+    icon: '🚫',
+    title: 'No credit card required',
+    description: 'Just your email to join the waitlist.'
   }
 ]
 
@@ -246,9 +234,8 @@ export default function LandingPage() {
           </Link>
           <nav className="hidden items-center gap-6 text-sm font-medium text-slate-600 md:flex">
             <a href="#problem" className="transition-colors duration-200 hover:text-slate-900">Problem</a>
-            <a href="#solution" className="transition-colors duration-200 hover:text-slate-900">How it Works</a>
-            <a href="#proof" className="transition-colors duration-200 hover:text-slate-900">Trust</a>
-            <a href="#founders" className="transition-colors duration-200 hover:text-slate-900">Founder Perks</a>
+            <a href="#solution" className="transition-colors duration-200 hover:text-slate-900">Solution</a>
+            <a href="#founders" className="transition-colors duration-200 hover:text-slate-900">Waitlist</a>
           </nav>
           <Link
             href="#join"
@@ -265,38 +252,22 @@ export default function LandingPage() {
 
         <div className="relative z-10 mx-auto flex max-w-7xl flex-col gap-16 px-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
           <motion.div className="max-w-xl" {...(shouldAnimate ? fadeInUp : {})}>
-            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-xs font-medium text-slate-600 shadow-sm backdrop-blur">
-              <span className="text-sky-500">●</span>
-              Validate before you build
-            </div>
-            <h1 className="mt-8 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
-              Hire your next top candidate <span className="text-sky-600">5x faster</span>
+            <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+              Stop Wasting Time on Irrelevant CVs
             </h1>
             <p className="mt-6 text-lg leading-8 text-slate-600 sm:text-xl">
-              Vettor is the AI recruiting co-pilot that filters hundreds of CVs in seconds, ranks them by genuine fit, and shows you why they made the shortlist.
+              We're building an AI tool that filters hundreds of CVs in seconds, so you only interview qualified candidates.
             </p>
 
-            <WaitlistForm submitted={submitted} onSubmit={handleWaitlistSubmit} helperText="No hard sell. No credit card. Just first access and a direct line to our team." />
-
-            <motion.div
-              className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-3"
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-            >
-              {heroHighlights.map((highlight) => (
-                <motion.div
-                  key={highlight.title}
-                  variants={fadeInUp}
-                  className="rounded-2xl border border-slate-200 bg-white/80 p-4 text-sm shadow-sm backdrop-blur transition-transform duration-200 hover:-translate-y-1"
-                >
-                  <div className="text-xl">{highlight.icon}</div>
-                  <p className="mt-3 text-base font-semibold text-slate-900">{highlight.title}</p>
-                  <p className="mt-2 text-xs text-slate-500">{highlight.subtitle}</p>
-                </motion.div>
-              ))}
-            </motion.div>
+            <div className="mt-8">
+              <WaitlistForm 
+                submitted={submitted} 
+                onSubmit={handleWaitlistSubmit} 
+                placeholder="Enter your work email"
+                ctaLabel="Join waitlist for early access"
+                helperText="No spam. We'll email when ready. First 50 users get 6 months free."
+              />
+            </div>
           </motion.div>
 
           <motion.div
@@ -310,32 +281,31 @@ export default function LandingPage() {
               : {})}
           >
             <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-sky-200/40 blur-2xl" aria-hidden="true" />
-            <div className="relative overflow-hidden rounded-3xl border border-white/60 bg-white/80 px-6 py-7 shadow-2xl backdrop-blur">
-              <div className="flex items-center justify-between text-xs font-medium text-slate-500">
-                <span className="text-slate-900">Bulk CV Upload</span>
-                <span>👥 200 candidates</span>
+            <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white/80 px-6 py-8 shadow-xl backdrop-blur">
+              <div className="text-center text-sm font-medium text-slate-600 mb-6">
+                Simple mockup of clean interface
               </div>
-              <div className="mt-6 rounded-2xl bg-slate-900 px-5 py-6 text-left text-white shadow-lg">
-                <p className="text-xs uppercase tracking-wide text-white/60">AI Fit Score</p>
-                <div className="mt-4 space-y-4 text-sm">
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">Laila Khan</span>
-                    <span className="rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-semibold text-emerald-300">92%</span>
+              <div className="rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center">
+                <div className="text-4xl mb-4">📄</div>
+                <p className="text-sm font-medium text-slate-600 mb-2">CV Upload Area</p>
+                <p className="text-xs text-slate-500">Drag & drop or click to upload</p>
+              </div>
+              <div className="mt-6 rounded-2xl border border-slate-200 bg-white px-5 py-4">
+                <p className="text-xs font-medium text-slate-600 mb-3">Filter Settings</p>
+                <div className="space-y-2 text-xs text-slate-500">
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-slate-300"></div>
+                    <span>Skills</span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">Victor Adeyemi</span>
-                    <span className="rounded-full bg-sky-500/20 px-3 py-1 text-xs font-semibold text-sky-300">88%</span>
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-slate-300"></div>
+                    <span>Experience</span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">Sara Iqbal</span>
-                    <span className="rounded-full bg-indigo-500/20 px-3 py-1 text-xs font-semibold text-indigo-200">84%</span>
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-slate-300"></div>
+                    <span>Certifications</span>
                   </div>
                 </div>
-                <p className="mt-5 text-xs text-white/70">Explainable insights show why each profile made the shortlist.</p>
-              </div>
-              <div className="mt-6 flex items-center justify-between rounded-2xl border border-slate-200 bg-white/70 px-5 py-4 text-sm text-slate-600">
-                <span>⏱️ Screening hours saved</span>
-                <span className="font-semibold text-slate-900">10.4 hrs/week</span>
               </div>
             </div>
           </motion.div>
@@ -346,14 +316,11 @@ export default function LandingPage() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <motion.div className="mx-auto max-w-3xl text-center" {...(shouldAnimate ? fadeInUp : {})}>
             <span className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-white">
-              The recruitment black hole
+              The Recruitment Black Hole
             </span>
             <h2 className="mt-8 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-              Manual screening is costing your team time, money, and quality
+              The Problem We're Solving
             </h2>
-            <p className="mt-4 text-base text-slate-600 sm:text-lg">
-              Vettor is a validation-first product. We're talking to recruiters who feel this pain every day.
-            </p>
           </motion.div>
 
           <motion.div
@@ -372,7 +339,25 @@ export default function LandingPage() {
                 <div className="text-3xl">{point.icon}</div>
                 <p className="mt-6 text-lg font-semibold text-slate-900">{point.title}</p>
                 <p className="mt-3 text-sm leading-6 text-slate-600">{point.description}</p>
-                <div className="mt-6 inline-flex rounded-full bg-white/60 px-3 py-1 text-xs font-semibold text-slate-800 shadow-sm">{point.metric}</div>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-100px' }}
+            className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2"
+          >
+            {redditQuotes.map((quote, index) => (
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                className="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur"
+              >
+                <p className="text-base italic text-slate-700 leading-relaxed">{quote.quote}</p>
+                <p className="mt-4 text-xs font-medium text-slate-500">{quote.source}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -383,13 +368,13 @@ export default function LandingPage() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <motion.div className="mx-auto max-w-3xl text-center" {...(shouldAnimate ? fadeInUp : {})}>
             <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-white/80">
-              How Vettor works
+              Our Focused Solution
             </span>
             <h2 className="mt-8 text-3xl font-bold tracking-tight sm:text-4xl">
-              From CV flood to ready-to-interview shortlist — in minutes
+              AI That Actually Works For Recruiters
             </h2>
             <p className="mt-4 text-base text-white/70 sm:text-lg">
-              We focus on one core workflow today: filter, rank, and explain resumes so you can validate demand for smarter hiring.
+              We're starting with just CV filtering - because that's where the pain is.
             </p>
           </motion.div>
 
@@ -398,91 +383,39 @@ export default function LandingPage() {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
-            className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-3"
+            className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4"
           >
-            {processSteps.map((step) => (
+            {solutionFeatures.map((feature) => (
               <motion.div
-                key={step.title}
+                key={feature.title}
                 variants={fadeInUp}
                 className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur transition-transform duration-200 hover:-translate-y-1"
               >
-                <div className="text-sm font-semibold text-white/70">{step.number}</div>
-                <h3 className="mt-5 text-xl font-semibold text-white">{step.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-white/70">{step.description}</p>
-                <div className="mt-6 inline-flex rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white/90">{step.badge}</div>
+                <div className="text-3xl">{feature.icon}</div>
+                <h3 className="mt-5 text-lg font-semibold text-white">{feature.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-white/70">{feature.description}</p>
                 <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-sky-500/10 opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-100" aria-hidden="true" />
               </motion.div>
             ))}
           </motion.div>
 
-          <motion.div {...(shouldAnimate ? fadeInUp : {})} className="mt-16 rounded-3xl border border-white/10 bg-white/10 px-6 py-10 text-center backdrop-blur sm:px-12">
-            <p className="text-base font-medium text-white">
-              🎯 <span className="font-semibold">See it in action:</span> Watch Vettor shortlist 150 CVs in 47 seconds with full transparency.
+          <motion.div {...(shouldAnimate ? fadeInUp : {})} className="mt-16 rounded-3xl border border-white/10 bg-white/10 px-6 py-8 text-center backdrop-blur sm:px-12">
+            <p className="text-base font-medium text-white/90">
+              <span className="font-semibold">NOTICE:</span> We're starting with just CV filtering - because that's where the pain is.
             </p>
-            <div className="mt-6 flex justify-center">
-              <button className="rounded-full bg-white px-6 py-2.5 text-sm font-semibold text-slate-900 shadow-md transition-all duration-200 hover:-translate-y-0.5">Watch demo →</button>
-            </div>
           </motion.div>
         </div>
       </section>
 
-      <section id="proof" className="py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <motion.div
-            className="grid gap-12 lg:grid-cols-[2fr,3fr] lg:items-center"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-          >
-            <motion.div variants={fadeInUp}>
-              <h3 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Trusted by forward-thinking recruiting teams</h3>
-              <p className="mt-4 text-base leading-7 text-slate-600">
-                We're onboarding founding recruiters from tech scale-ups, global HR teams, and university career offices who want to validate faster hiring — before investing in a full build.
-              </p>
-              <div className="mt-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                <p className="text-base italic text-slate-700">
-                  "Vettor cut our screening time by 80% and surfaced candidates we'd never have spotted manually. The explainable scoring gives us confidence to move fast."
-                </p>
-                <div className="mt-6 text-sm font-semibold text-slate-900">HR Director, Growth-stage SaaS Team</div>
-              </div>
-            </motion.div>
-
-            <motion.div variants={fadeInUp} className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-              {socialProofLogos.map((logo) => (
-                <div key={logo} className="flex h-24 items-center justify-center rounded-2xl border border-slate-200 bg-white/80 text-sm font-semibold tracking-wide text-slate-500 backdrop-blur">
-                  {logo}
-                </div>
-              ))}
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="bg-slate-50 py-20 sm:py-24">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <motion.div className="rounded-3xl border border-slate-200 bg-white/80 px-6 py-10 text-center shadow-sm backdrop-blur sm:px-10" {...(shouldAnimate ? fadeInUp : {})}>
-            <h4 className="text-lg font-semibold text-slate-900">Enterprise-grade from day zero</h4>
-            <p className="mt-4 text-sm text-slate-600">Compliance is table stakes. Vettor is built on secure infrastructure with transparency built into every decision.</p>
-            <div className="mt-6 flex flex-wrap justify-center gap-3">
-              {securityPoints.map((point) => (
-                <span key={point} className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-slate-600 shadow-sm">
-                  {point}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
 
       <section id="founders" className="py-24 sm:py-32">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <motion.div className="mx-auto max-w-3xl text-center" {...(shouldAnimate ? fadeInUp : {})}>
             <span className="inline-flex items-center gap-2 rounded-full bg-sky-100 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-sky-600">
-              Founding recruiter program
+              Be a Founding Recruiter
             </span>
-            <h2 className="mt-8 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Be the voice that shapes Vettor from day one</h2>
-            <p className="mt-4 text-base text-slate-600">We have 47 founding seats left. Help us build the product you wish existed and unlock lifetime advantages.</p>
+            <h2 className="mt-8 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Join the Waitlist</h2>
+            <p className="mt-4 text-base text-slate-600">Help us validate demand and shape the product from day one.</p>
           </motion.div>
 
           <motion.div
@@ -490,7 +423,7 @@ export default function LandingPage() {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, margin: '-100px' }}
-            className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2"
+            className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
           >
             {founderBenefits.map((benefit) => (
               <motion.div
@@ -511,7 +444,7 @@ export default function LandingPage() {
               onSubmit={handleWaitlistSubmit}
               layout="inline"
               align="center"
-              helperText="Founders get 6 months free, lifetime discounts, and weekly product workshops."
+              helperText="No credit card required. We'll email when ready."
               compact
               className="w-full max-w-xl"
             />
@@ -519,33 +452,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="pb-24 sm:pb-32">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <motion.div
-            {...(shouldAnimate ? fadeInUp : {})}
-            className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-slate-900 via-indigo-900 to-sky-900 px-6 py-14 text-center text-white shadow-2xl sm:px-12"
-          >
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.18),_transparent_55%)]" aria-hidden="true" />
-            <div className="relative z-10 mx-auto max-w-2xl space-y-6">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-white/70">Launch before you build</p>
-              <h2 className="text-3xl font-bold sm:text-4xl">Ready to validate smarter hiring?</h2>
-              <p className="text-base text-white/80">
-                Join hundreds of recruiters already on the waitlist. Get early access, shape the roadmap, and make sure Vettor is exactly what you need before we write another line of product code.
-              </p>
-              <WaitlistForm
-                submitted={submitted}
-                onSubmit={handleWaitlistSubmit}
-                layout="inline"
-                align="center"
-                helperText="We reply within 24 hours with a quick qualifying survey and a link to book a call if you'd like."
-              />
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
       <footer className="border-t border-slate-200 bg-white/80 py-10">
-        <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 px-4 text-xs text-slate-500 sm:flex-row sm:justify-between">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 text-xs text-slate-500 sm:flex-row sm:justify-between">
           <div className="flex items-center gap-3">
             <div className="relative h-8 w-8 flex items-center justify-center overflow-hidden rounded bg-white p-0.5 ring-1 ring-slate-200/50">
               <Image 
@@ -557,6 +465,14 @@ export default function LandingPage() {
               />
             </div>
             <span>Vettor <span className="text-slate-300">•</span> AI co-pilot for recruiters</span>
+          </div>
+          <div className="flex flex-col items-center gap-2 text-center sm:items-end sm:text-right">
+            <p className="text-xs text-slate-600 font-medium">
+              No product exists yet - we're validating demand.
+            </p>
+            <p className="text-xs text-slate-500">
+              If we get 100 serious recruiters on this list, we'll build it.
+            </p>
           </div>
           <div className="flex items-center gap-4">
             <Link href="#" className="transition-colors duration-200 hover:text-slate-700">Privacy</Link>
