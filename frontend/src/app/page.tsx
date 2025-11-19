@@ -246,17 +246,15 @@ export default function LandingPage() {
     <div className="bg-white text-slate-900">
       <header className="absolute inset-x-0 top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200/50 shadow-lg">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center group">
-            <div className="relative h-16 w-16 sm:h-20 sm:w-20 flex items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-white to-slate-50 p-2 shadow-lg ring-1 ring-slate-200/50 transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl">
-              <Image 
-                src="/images/logo.png" 
-                alt="Vettor logo" 
-                width={80} 
-                height={80} 
-                className="h-full w-full object-contain object-center" 
-                priority 
-              />
-            </div>
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/images/logo.png"
+              alt="Vettor logo"
+              width={160}
+              height={160}
+              className="h-14 w-auto sm:h-16 md:h-20 object-contain"
+              priority
+            />
           </Link>
           <nav className="hidden items-center gap-8 text-sm font-semibold text-slate-600 md:flex">
             <a href="#problem" className="relative transition-colors duration-200 hover:text-slate-900 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-gradient-to-r after:from-sky-500 after:to-blue-500 hover:after:w-full after:transition-all after:duration-300">Problem</a>

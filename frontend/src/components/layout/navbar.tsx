@@ -2,6 +2,7 @@
 
 import { Disclosure } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import Image from 'next/image'
 import Link from 'next/link'
 
 const navigation = [
@@ -20,8 +21,20 @@ export function Navbar() {
                         <div className="flex h-16 justify-between">
                             <div className="flex">
                                 <div className="flex flex-shrink-0 items-center">
-                                    <Link href="/" className="text-2xl font-bold text-blue-600">
-                                        AI Recruit
+                                    <Link href="/" className="flex items-center gap-3 group">
+                                        <div className="relative h-12 w-12 sm:h-14 sm:w-14 flex items-center justify-center overflow-hidden rounded-xl bg-white p-2 shadow-md ring-1 ring-gray-200/50 transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg">
+                                            <Image 
+                                                src="/images/logo.png" 
+                                                alt="Vettor logo" 
+                                                width={56} 
+                                                height={56} 
+                                                className="h-full w-full object-contain object-center" 
+                                                priority 
+                                            />
+                                        </div>
+                                        <span className="text-xl sm:text-2xl font-bold text-blue-600 hidden sm:block">
+                                            Vettor
+                                        </span>
                                     </Link>
                                 </div>
                                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
