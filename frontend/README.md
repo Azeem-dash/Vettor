@@ -35,10 +35,18 @@ npm install
 
 3. Set up environment variables:
 ```bash
-cp .env.example .env.local
+# Create .env.local file with the following variables:
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-4. Run the development server:
+4. Set up Supabase database:
+   - Create a new project at [Supabase](https://supabase.com)
+   - Go to SQL Editor and run the SQL from `supabase-setup.sql` to create the waitlist table
+   - Copy your project URL and anon key from Settings > API
+   - Add them to your `.env.local` file
+
+5. Run the development server:
 ```bash
 npm run dev
 ```

@@ -112,11 +112,20 @@ function WaitlistForm({
 
   if (submitted) {
     return (
-      <div
-        className={`rounded-2xl border border-green-200 bg-green-50/80 px-4 py-5 text-sm font-medium text-green-700 backdrop-blur ${align === 'center' ? 'text-center' : ''} ${className}`}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className={`rounded-2xl border-2 border-green-200 bg-gradient-to-br from-green-50 to-emerald-50 px-6 py-5 text-sm font-medium text-green-700 backdrop-blur shadow-lg ${align === 'center' ? 'text-center' : ''} ${className}`}
       >
-        ✅ You're on the list! We'll reach out with next steps and your founder perks.
-      </div>
+        <div className="flex items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-500 text-white">
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <span>You&apos;re on the list! We&apos;ll reach out with next steps and your founder perks.</span>
+        </div>
+      </motion.div>
     )
   }
 
@@ -155,14 +164,14 @@ function WaitlistForm({
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           placeholder={placeholder}
-          className={`flex-1 border-0 text-slate-900 shadow-sm ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-sky-500 focus:outline-none transition-colors duration-200 ${inputSize}`}
+          className={`flex-1 border-0 bg-white/90 text-slate-900 shadow-lg ring-2 ring-inset ring-slate-200/50 placeholder:text-slate-400 focus:ring-2 focus:ring-sky-500 focus:bg-white focus:outline-none transition-all duration-300 backdrop-blur-sm ${inputSize}`}
           disabled={isSubmitting}
           aria-label="Work email"
         />
         <button
           type="submit"
           disabled={isSubmitting}
-          className={`flex items-center justify-center gap-2 bg-sky-600 font-semibold text-white shadow-sm transition-all duration-200 hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:cursor-not-allowed disabled:opacity-60 ${buttonSize}`}
+          className={`group relative flex items-center justify-center gap-2 bg-gradient-to-r from-sky-600 to-blue-600 font-semibold text-white shadow-lg shadow-sky-500/25 transition-all duration-300 hover:from-sky-500 hover:to-blue-500 hover:shadow-xl hover:shadow-sky-500/30 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 ${buttonSize}`}
         >
           {isSubmitting ? (
             <>
@@ -211,17 +220,34 @@ export default function LandingPage() {
   const shouldAnimate = mounted && !prefersReducedMotion
 
   const handleWaitlistSubmit = async (email: string) => {
-    await new Promise((resolve) => setTimeout(resolve, 900))
-    console.log('Waitlist signup:', email)
-    setSubmitted(true)
+    try {
+      const response = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to join waitlist')
+      }
+
+      setSubmitted(true)
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Something went wrong. Please try again.'
+      throw new Error(message)
+    }
   }
 
   return (
     <div className="bg-white text-slate-900">
-      <header className="absolute inset-x-0 top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/50 shadow-sm">
+      <header className="absolute inset-x-0 top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200/50 shadow-lg">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
           <Link href="/" className="flex items-center group">
-            <div className="relative h-16 w-16 sm:h-20 sm:w-20 flex items-center justify-center overflow-hidden rounded-lg bg-white p-1.5 shadow-sm ring-1 ring-slate-200/50 transition-transform duration-200 group-hover:scale-105">
+            <div className="relative h-16 w-16 sm:h-20 sm:w-20 flex items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-white to-slate-50 p-2 shadow-lg ring-1 ring-slate-200/50 transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl">
               <Image 
                 src="/images/logo.png" 
                 alt="Vettor logo" 
@@ -232,31 +258,51 @@ export default function LandingPage() {
               />
             </div>
           </Link>
-          <nav className="hidden items-center gap-6 text-sm font-medium text-slate-600 md:flex">
-            <a href="#problem" className="transition-colors duration-200 hover:text-slate-900">Problem</a>
-            <a href="#solution" className="transition-colors duration-200 hover:text-slate-900">Solution</a>
-            <a href="#founders" className="transition-colors duration-200 hover:text-slate-900">Waitlist</a>
+          <nav className="hidden items-center gap-8 text-sm font-semibold text-slate-600 md:flex">
+            <a href="#problem" className="relative transition-colors duration-200 hover:text-slate-900 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-gradient-to-r after:from-sky-500 after:to-blue-500 hover:after:w-full after:transition-all after:duration-300">Problem</a>
+            <a href="#solution" className="relative transition-colors duration-200 hover:text-slate-900 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-gradient-to-r after:from-sky-500 after:to-blue-500 hover:after:w-full after:transition-all after:duration-300">Solution</a>
+            <a href="#founders" className="relative transition-colors duration-200 hover:text-slate-900 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-gradient-to-r after:from-sky-500 after:to-blue-500 hover:after:w-full after:transition-all after:duration-300">Waitlist</a>
           </nav>
           <Link
             href="#join"
-            className="hidden rounded-full border border-slate-200 bg-white/80 px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition-all duration-200 hover:border-slate-300 hover:shadow md:inline-flex"
+            className="hidden rounded-full border-2 border-slate-200 bg-gradient-to-r from-sky-600 to-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-sky-500/25 transition-all duration-300 hover:from-sky-500 hover:to-blue-500 hover:shadow-xl hover:shadow-sky-500/30 hover:-translate-y-0.5 md:inline-flex"
           >
             Join Waitlist
           </Link>
         </div>
       </header>
 
-      <section id="join" className="relative overflow-hidden bg-gradient-to-br from-sky-50 via-white to-indigo-50 pb-24 pt-28 sm:pt-32">
-        <div className="absolute -right-32 top-10 h-64 w-64 rounded-full bg-sky-200/40 blur-3xl" aria-hidden="true" />
-        <div className="absolute -left-20 bottom-0 h-72 w-72 rounded-full bg-indigo-200/40 blur-3xl" aria-hidden="true" />
+      <section id="join" className="relative overflow-hidden bg-gradient-to-br from-sky-50 via-white to-indigo-50 pb-32 pt-32 sm:pt-40">
+        {/* Animated background gradients */}
+        <div className="absolute -right-32 top-10 h-96 w-96 rounded-full bg-gradient-to-r from-sky-400/30 to-blue-400/30 blur-3xl animate-pulse" aria-hidden="true" />
+        <div className="absolute -left-20 bottom-0 h-[500px] w-[500px] rounded-full bg-gradient-to-r from-indigo-400/30 to-purple-400/30 blur-3xl animate-pulse" style={{ animationDelay: '1s' }} aria-hidden="true" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-gradient-to-r from-cyan-400/20 to-sky-400/20 blur-3xl animate-pulse" style={{ animationDelay: '2s' }} aria-hidden="true" />
+        
+        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] opacity-40" aria-hidden="true" />
 
         <div className="relative z-10 mx-auto flex max-w-7xl flex-col gap-16 px-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
-          <motion.div className="max-w-xl" {...(shouldAnimate ? fadeInUp : {})}>
-            <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
-              Stop Wasting Time on Irrelevant CVs
+          <motion.div className="max-w-2xl" {...(shouldAnimate ? fadeInUp : {})}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="inline-flex items-center gap-2 rounded-full border border-sky-200/50 bg-white/60 px-4 py-2 text-xs font-semibold text-sky-700 shadow-sm backdrop-blur-sm mb-6"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75"></span>
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-sky-500"></span>
+              </span>
+              Early Access Available
+            </motion.div>
+            <h1 className="text-5xl font-extrabold tracking-tight text-slate-900 sm:text-6xl lg:text-7xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 bg-clip-text text-transparent">
+              Stop Wasting Time on{' '}
+              <span className="bg-gradient-to-r from-sky-600 to-blue-600 bg-clip-text text-transparent">
+                Irrelevant CVs
+              </span>
             </h1>
-            <p className="mt-6 text-lg leading-8 text-slate-600 sm:text-xl">
-              We're building an AI tool that filters hundreds of CVs in seconds, so you only interview qualified candidates.
+            <p className="mt-6 text-xl leading-8 text-slate-600 sm:text-2xl font-medium">
+              We&apos;re building an AI tool that filters hundreds of CVs in seconds, so you only interview qualified candidates.
             </p>
 
             <div className="mt-8">
@@ -271,40 +317,82 @@ export default function LandingPage() {
           </motion.div>
 
           <motion.div
-            className="relative mx-auto w-full max-w-md"
+            className="relative mx-auto w-full max-w-lg"
             {...(shouldAnimate
               ? {
                   initial: { opacity: 0, y: 24, scale: 0.95 },
                   animate: { opacity: 1, y: 0, scale: 1 },
-                  transition: { duration: 0.6, delay: 0.12, ease: 'easeOut' }
+                  transition: { duration: 0.6, delay: 0.2, ease: 'easeOut' }
                 }
               : {})}
           >
-            <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-sky-200/40 blur-2xl" aria-hidden="true" />
-            <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white/80 px-6 py-8 shadow-xl backdrop-blur">
-              <div className="text-center text-sm font-medium text-slate-600 mb-6">
-                Simple mockup of clean interface
+            {/* Glow effect */}
+            <div className="absolute -inset-4 rounded-3xl bg-gradient-to-r from-sky-400/20 via-blue-400/20 to-indigo-400/20 blur-2xl opacity-75 animate-pulse" aria-hidden="true" />
+            
+            <div className="relative overflow-hidden rounded-3xl border border-slate-200/50 bg-white/90 px-8 py-10 shadow-2xl backdrop-blur-xl ring-1 ring-slate-200/50">
+              {/* Header */}
+              <div className="mb-6 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="h-3 w-3 rounded-full bg-red-500"></div>
+                  <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
+                  <div className="h-3 w-3 rounded-full bg-green-500"></div>
+                </div>
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Preview</span>
               </div>
-              <div className="rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center">
-                <div className="text-4xl mb-4">📄</div>
-                <p className="text-sm font-medium text-slate-600 mb-2">CV Upload Area</p>
-                <p className="text-xs text-slate-500">Drag & drop or click to upload</p>
+
+              {/* Upload area with animation */}
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                className="relative rounded-2xl border-2 border-dashed border-sky-300/50 bg-gradient-to-br from-sky-50/50 to-blue-50/50 px-8 py-16 text-center backdrop-blur-sm transition-all duration-300 hover:border-sky-400 hover:bg-gradient-to-br hover:from-sky-50 hover:to-blue-50"
+              >
+                <motion.div
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  className="mb-4 text-5xl"
+                >
+                  📄
+                </motion.div>
+                <p className="text-base font-semibold text-slate-700 mb-2">CV Upload Area</p>
+                <p className="text-sm text-slate-500">Drag & drop or click to upload</p>
+                <div className="mt-4 flex items-center justify-center gap-2 text-xs text-slate-400">
+                  <span>PDF, DOC, DOCX</span>
+                  <span>•</span>
+                  <span>Up to 200 files</span>
+                </div>
+              </motion.div>
+
+              {/* Filter settings */}
+              <div className="mt-6 rounded-2xl border border-slate-200/50 bg-gradient-to-br from-white to-slate-50/50 px-6 py-5 backdrop-blur-sm">
+                <div className="mb-4 flex items-center justify-between">
+                  <p className="text-sm font-semibold text-slate-700">Filter Settings</p>
+                  <span className="rounded-full bg-sky-100 px-2 py-1 text-xs font-medium text-sky-700">AI Powered</span>
+                </div>
+                <div className="space-y-3">
+                  {['Skills', 'Experience', 'Certifications'].map((item, idx) => (
+                    <motion.div
+                      key={item}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.3 + idx * 0.1 }}
+                      className="flex items-center gap-3 rounded-lg bg-white/60 px-3 py-2.5 backdrop-blur-sm"
+                    >
+                      <div className="h-2 w-2 rounded-full bg-gradient-to-r from-sky-500 to-blue-500"></div>
+                      <span className="text-sm font-medium text-slate-600">{item}</span>
+                    </motion.div>
+                  ))}
+                </div>
               </div>
-              <div className="mt-6 rounded-2xl border border-slate-200 bg-white px-5 py-4">
-                <p className="text-xs font-medium text-slate-600 mb-3">Filter Settings</p>
-                <div className="space-y-2 text-xs text-slate-500">
-                  <div className="flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-slate-300"></div>
-                    <span>Skills</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-slate-300"></div>
-                    <span>Experience</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-slate-300"></div>
-                    <span>Certifications</span>
-                  </div>
+
+              {/* Stats preview */}
+              <div className="mt-6 flex items-center justify-between rounded-xl bg-gradient-to-r from-sky-500/10 to-blue-500/10 px-4 py-3 backdrop-blur-sm">
+                <div>
+                  <p className="text-xs text-slate-500">Processing time</p>
+                  <p className="text-lg font-bold text-slate-900">&lt; 60s</p>
+                </div>
+                <div className="h-8 w-px bg-slate-300"></div>
+                <div>
+                  <p className="text-xs text-slate-500">CVs processed</p>
+                  <p className="text-lg font-bold text-slate-900">200+</p>
                 </div>
               </div>
             </div>
@@ -312,14 +400,20 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="problem" className="py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <section id="problem" className="relative py-32 sm:py-40 bg-gradient-to-b from-white via-slate-50/50 to-white">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px]" aria-hidden="true" />
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <motion.div className="mx-auto max-w-3xl text-center" {...(shouldAnimate ? fadeInUp : {})}>
-            <span className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-white">
+            <motion.span
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-slate-900 to-slate-800 px-5 py-2 text-xs font-semibold uppercase tracking-wide text-white shadow-lg"
+            >
               The Recruitment Black Hole
-            </span>
-            <h2 className="mt-8 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-              The Problem We're Solving
+            </motion.span>
+            <h2 className="mt-8 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+              The Problem We&apos;re Solving
             </h2>
           </motion.div>
 
@@ -334,11 +428,15 @@ export default function LandingPage() {
               <motion.div
                 key={point.title}
                 variants={fadeInUp}
-                className={`rounded-3xl border bg-gradient-to-br p-6 shadow-sm backdrop-blur transition-transform duration-200 hover:-translate-y-1 ${point.accent}`}
+                whileHover={{ y: -8, scale: 1.02 }}
+                className={`group relative overflow-hidden rounded-3xl border-2 bg-gradient-to-br p-8 shadow-xl backdrop-blur transition-all duration-300 hover:shadow-2xl ${point.accent}`}
               >
-                <div className="text-3xl">{point.icon}</div>
-                <p className="mt-6 text-lg font-semibold text-slate-900">{point.title}</p>
-                <p className="mt-3 text-sm leading-6 text-slate-600">{point.description}</p>
+                <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/20 blur-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100" aria-hidden="true" />
+                <div className="relative">
+                  <div className="text-5xl mb-6 transform transition-transform duration-300 group-hover:scale-110">{point.icon}</div>
+                  <p className="text-xl font-bold text-slate-900 mb-3">{point.title}</p>
+                  <p className="text-base leading-7 text-slate-700">{point.description}</p>
+                </div>
               </motion.div>
             ))}
           </motion.div>
@@ -354,27 +452,43 @@ export default function LandingPage() {
               <motion.div
                 key={index}
                 variants={fadeInUp}
-                className="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur"
+                whileHover={{ y: -4 }}
+                className="group relative overflow-hidden rounded-3xl border-2 border-slate-200/50 bg-gradient-to-br from-white to-slate-50/50 p-8 shadow-lg backdrop-blur-xl transition-all duration-300 hover:shadow-xl hover:border-slate-300"
               >
-                <p className="text-base italic text-slate-700 leading-relaxed">{quote.quote}</p>
-                <p className="mt-4 text-xs font-medium text-slate-500">{quote.source}</p>
+                <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" aria-hidden="true" />
+                <div className="mb-4 text-2xl opacity-20">&quot;</div>
+                <p className="text-lg italic text-slate-700 leading-relaxed font-medium">{quote.quote}</p>
+                <div className="mt-6 flex items-center gap-2">
+                  <div className="h-8 w-8 rounded-full bg-gradient-to-r from-orange-400 to-red-400 flex items-center justify-center text-white text-xs font-bold">r</div>
+                  <p className="text-sm font-semibold text-slate-600">{quote.source}</p>
+                </div>
               </motion.div>
             ))}
           </motion.div>
         </div>
       </section>
 
-      <section id="solution" className="bg-slate-900 py-24 text-white sm:py-32">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <section id="solution" className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-32 text-white sm:py-40">
+        {/* Animated background elements */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(56,189,248,0.1),transparent_50%)]" aria-hidden="true" />
+        <div className="absolute top-0 left-1/4 h-96 w-96 rounded-full bg-blue-500/10 blur-3xl animate-pulse" aria-hidden="true" />
+        <div className="absolute bottom-0 right-1/4 h-96 w-96 rounded-full bg-cyan-500/10 blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }} aria-hidden="true" />
+        
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <motion.div className="mx-auto max-w-3xl text-center" {...(shouldAnimate ? fadeInUp : {})}>
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-white/80">
+            <motion.span
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-5 py-2 text-xs font-semibold uppercase tracking-wide text-white/90 shadow-lg"
+            >
               Our Focused Solution
-            </span>
-            <h2 className="mt-8 text-3xl font-bold tracking-tight sm:text-4xl">
+            </motion.span>
+            <h2 className="mt-8 text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl bg-gradient-to-r from-white via-blue-100 to-cyan-100 bg-clip-text text-transparent">
               AI That Actually Works For Recruiters
             </h2>
-            <p className="mt-4 text-base text-white/70 sm:text-lg">
-              We're starting with just CV filtering - because that's where the pain is.
+            <p className="mt-6 text-lg text-white/80 sm:text-xl font-medium">
+              We&apos;re starting with just CV filtering - because that&apos;s where the pain is.
             </p>
           </motion.div>
 
@@ -389,33 +503,56 @@ export default function LandingPage() {
               <motion.div
                 key={feature.title}
                 variants={fadeInUp}
-                className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur transition-transform duration-200 hover:-translate-y-1"
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="group relative overflow-hidden rounded-3xl border border-white/20 bg-white/5 p-8 backdrop-blur-xl transition-all duration-300 hover:bg-white/10 hover:border-white/30 hover:shadow-2xl hover:shadow-blue-500/10"
               >
-                <div className="text-3xl">{feature.icon}</div>
-                <h3 className="mt-5 text-lg font-semibold text-white">{feature.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-white/70">{feature.description}</p>
-                <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-sky-500/10 opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-100" aria-hidden="true" />
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 via-cyan-500/0 to-sky-500/0 group-hover:from-blue-500/10 group-hover:via-cyan-500/10 group-hover:to-sky-500/10 transition-all duration-300" aria-hidden="true" />
+                <div className="relative">
+                  <div className="text-5xl mb-6 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">{feature.icon}</div>
+                  <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
+                  <p className="text-base leading-7 text-white/80">{feature.description}</p>
+                </div>
+                <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-cyan-500/20 opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-100" aria-hidden="true" />
               </motion.div>
             ))}
           </motion.div>
 
-          <motion.div {...(shouldAnimate ? fadeInUp : {})} className="mt-16 rounded-3xl border border-white/10 bg-white/10 px-6 py-8 text-center backdrop-blur sm:px-12">
-            <p className="text-base font-medium text-white/90">
-              <span className="font-semibold">NOTICE:</span> We're starting with just CV filtering - because that's where the pain is.
+          <motion.div
+            {...(shouldAnimate ? fadeInUp : {})}
+            className="mt-16 rounded-3xl border-2 border-white/20 bg-gradient-to-r from-white/10 to-white/5 px-8 py-10 text-center backdrop-blur-xl shadow-2xl sm:px-12"
+          >
+            <div className="inline-flex items-center gap-2 rounded-full bg-yellow-500/20 px-4 py-2 mb-4">
+              <span className="text-yellow-300">⚠️</span>
+              <span className="text-xs font-semibold text-yellow-200 uppercase tracking-wide">Notice</span>
+            </div>
+            <p className="text-lg font-semibold text-white">
+              We&apos;re starting with just CV filtering - because that&apos;s where the pain is.
             </p>
           </motion.div>
         </div>
       </section>
 
 
-      <section id="founders" className="py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <section id="founders" className="relative py-32 sm:py-40 bg-gradient-to-b from-white via-sky-50/30 to-white">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px]" aria-hidden="true" />
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <motion.div className="mx-auto max-w-3xl text-center" {...(shouldAnimate ? fadeInUp : {})}>
-            <span className="inline-flex items-center gap-2 rounded-full bg-sky-100 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-sky-600">
+            <motion.span
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-sky-100 to-blue-100 border border-sky-200 px-5 py-2 text-xs font-semibold uppercase tracking-wide text-sky-700 shadow-sm"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75"></span>
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-sky-500"></span>
+              </span>
               Be a Founding Recruiter
-            </span>
-            <h2 className="mt-8 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Join the Waitlist</h2>
-            <p className="mt-4 text-base text-slate-600">Help us validate demand and shape the product from day one.</p>
+            </motion.span>
+            <h2 className="mt-8 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+              Join the Waitlist
+            </h2>
+            <p className="mt-6 text-lg text-slate-600 font-medium">Help us validate demand and shape the product from day one.</p>
           </motion.div>
 
           <motion.div
@@ -429,11 +566,15 @@ export default function LandingPage() {
               <motion.div
                 key={benefit.title}
                 variants={fadeInUp}
-                className="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur transition-transform duration-200 hover:-translate-y-1"
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="group relative overflow-hidden rounded-3xl border-2 border-slate-200/50 bg-gradient-to-br from-white to-slate-50/50 p-8 shadow-lg backdrop-blur-xl transition-all duration-300 hover:shadow-2xl hover:border-sky-300/50"
               >
-                <div className="text-3xl">{benefit.icon}</div>
-                <p className="mt-6 text-lg font-semibold text-slate-900">{benefit.title}</p>
-                <p className="mt-3 text-sm leading-6 text-slate-600">{benefit.description}</p>
+                <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-sky-100/50 blur-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100" aria-hidden="true" />
+                <div className="relative">
+                  <div className="text-5xl mb-6 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">{benefit.icon}</div>
+                  <p className="text-xl font-bold text-slate-900 mb-3">{benefit.title}</p>
+                  <p className="text-base leading-7 text-slate-600">{benefit.description}</p>
+                </div>
               </motion.div>
             ))}
           </motion.div>
@@ -452,10 +593,11 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <footer className="border-t border-slate-200 bg-white/80 py-10">
-        <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 text-xs text-slate-500 sm:flex-row sm:justify-between">
+      <footer className="relative border-t border-slate-200/50 bg-gradient-to-b from-white to-slate-50/30 py-12 backdrop-blur-sm">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808005_1px,transparent_1px),linear-gradient(to_bottom,#80808005_1px,transparent_1px)] bg-[size:24px_24px]" aria-hidden="true" />
+        <div className="relative mx-auto flex max-w-6xl flex-col items-center gap-8 px-4 text-xs text-slate-500 sm:flex-row sm:justify-between">
           <div className="flex items-center gap-3">
-            <div className="relative h-8 w-8 flex items-center justify-center overflow-hidden rounded bg-white p-0.5 ring-1 ring-slate-200/50">
+            <div className="relative h-10 w-10 flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-white to-slate-50 p-1 shadow-md ring-1 ring-slate-200/50">
               <Image 
                 src="/images/logo.png" 
                 alt="Vettor logo" 
@@ -464,20 +606,20 @@ export default function LandingPage() {
                 className="h-full w-full object-contain object-center" 
               />
             </div>
-            <span>Vettor <span className="text-slate-300">•</span> AI co-pilot for recruiters</span>
+            <span className="font-medium text-slate-600">Vettor <span className="text-slate-300">•</span> AI co-pilot for recruiters</span>
           </div>
           <div className="flex flex-col items-center gap-2 text-center sm:items-end sm:text-right">
-            <p className="text-xs text-slate-600 font-medium">
-              No product exists yet - we're validating demand.
+            <p className="text-sm text-slate-700 font-semibold">
+              No product exists yet - we&apos;re validating demand.
             </p>
             <p className="text-xs text-slate-500">
-              If we get 100 serious recruiters on this list, we'll build it.
+              If we get 100 serious recruiters on this list, we&apos;ll build it.
             </p>
           </div>
-          <div className="flex items-center gap-4">
-            <Link href="#" className="transition-colors duration-200 hover:text-slate-700">Privacy</Link>
-            <Link href="#" className="transition-colors duration-200 hover:text-slate-700">Terms</Link>
-            <Link href="mailto:contact@vettor.com" className="transition-colors duration-200 hover:text-slate-700">contact@vettor.com</Link>
+          <div className="flex items-center gap-6">
+            <Link href="#" className="font-medium transition-colors duration-200 hover:text-slate-700 hover:underline">Privacy</Link>
+            <Link href="#" className="font-medium transition-colors duration-200 hover:text-slate-700 hover:underline">Terms</Link>
+            <Link href="mailto:contact@vettor.com" className="font-medium transition-colors duration-200 hover:text-sky-600 hover:underline">contact@vettor.com</Link>
           </div>
         </div>
       </footer>
